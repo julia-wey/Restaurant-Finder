@@ -21,6 +21,7 @@ class Restaurant:
             raise ValueError(
                 "Name must be a non-empty string."
             )
+        
     @property
     def cuisine(self):
         return self._cuisine 
@@ -123,7 +124,6 @@ class Restaurant:
             return cls.create_instance(row)
         else:
             None
-            #raise ValueError(f'{name} not found.')
 
     @classmethod
     def find_by_id(cls, id):

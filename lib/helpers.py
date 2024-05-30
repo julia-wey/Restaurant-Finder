@@ -71,12 +71,6 @@ def create_restaurant():
     except Exception as exc:
         print('Error adding restaurant: ', exc)
         
-        
-        #restaurant = Restaurant.create(name, cuisine, city_id)
-        #print(f'{name} successfully added.')
-    #except Exception as exc:
-        #print('Error adding restaurant: ', exc)
-
 def delete_restaurant():
     name = input("Enter the restaurant's name: ")
     if restaurant := Restaurant.find_restaurant_by_name(name):

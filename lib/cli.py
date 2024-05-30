@@ -46,7 +46,6 @@ def main():
         else:
             print("Invalid choice")
 
-
 def menu():
     print("Please select an option:")
     print("0. Exit the program.")

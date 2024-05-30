@@ -122,12 +122,9 @@ class City:
             WHERE city_id = ?
         """
         CURSOR.execute(sql, (self.id,),)
-
         rows = CURSOR.fetchall()
         return [
             Restaurant.create_instance(row) for row in rows
         ]
        
-    
-        
          
