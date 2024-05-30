@@ -68,8 +68,7 @@ class Restaurant:
         CURSOR.execute(sql, (self.name,))
         CONN.commit()
         print(f'{self.name} successfully deleted from database.')
-        #self.name = None
-
+        
     def __repr__(self):
         city_name = "Unknown"
         if self.city_id is not None:

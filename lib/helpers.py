@@ -35,7 +35,7 @@ def delete_city():
     id_ = input("Enter the city's id: ")
     if city := City.find_by_id(id_):
         city.delete()
-        print(f'City {id_} deleted.')
+        print(f'City with id:{id_} successfully deleted.')
     else:
         print(f'City {id_} not found.')
 
@@ -59,10 +59,23 @@ def create_restaurant():
     cuisine = input("Enter the restaurant's cuisine: ")
     city_id = input("Enter the restaurant's city id: ")
     try:
-        restaurant = Restaurant.create(name, cuisine, city_id)
-        print(f'{name} successfully added.')
+        city_id = int(city_id)
+
+        if City.find_by_id(city_id):
+            restaurant = Restaurant.create(name, cuisine, city_id)
+            print(f'{name} successfully added.')
+        else:
+            print(f'Error adding restaurant')
+    except ValueError:
+        print('Error adding restaurant: City id must be an integer.')
     except Exception as exc:
         print('Error adding restaurant: ', exc)
+        
+        
+        #restaurant = Restaurant.create(name, cuisine, city_id)
+        #print(f'{name} successfully added.')
+    #except Exception as exc:
+        #print('Error adding restaurant: ', exc)
 
 def delete_restaurant():
     name = input("Enter the restaurant's name: ")
@@ -76,6 +89,6 @@ def list_restaurants_by_city():
     if city := City.find_city_by_name(name):
         for restaurant in city.restaurants():
             print(restaurant)
-        else:
-            print(f'City {name} not found.')
+    else:
+            print(f'City of {name} not found.')
 

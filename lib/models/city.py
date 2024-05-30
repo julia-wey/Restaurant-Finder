@@ -88,7 +88,6 @@ class City:
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        print("successfully deleted from database")
         self.id = None
 
     @classmethod
