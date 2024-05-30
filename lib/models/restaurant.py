@@ -18,6 +18,22 @@ class Restaurant:
 
         self.ID = CURSOR.lastrowid
 
+    def delete(self):
+        if not self.id:
+            print('no id')
+            return None
+        sql = """
+            DELETE FROM restaurants
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        print("successfully deleted from database")
+        self.id = None
+
+    def __repr__(self):
+        return f'<Restaurant name={self.name} city_id={self.city_id}>'
+    
     @classmethod
     def create_table(cls):
         sql = """
@@ -43,6 +59,22 @@ class Restaurant:
         new_restaurant.save()
         return new_restaurant 
 
-    def __repr__(self):
-        return f'<Restaurant name={self.name} city_id=self.city_id>'
+    @classmethod
+    def create_instance(cls, row):
+        return cls(id=row[0], name=row[1], cuisine=row[2], city_id=row[3])
+    
+    @classmethod
+    def display_all(cls):
+        sql = "SELECT * FROM restaurants;"
+        restaurant_rows = CURSOR.execute(sql).fetchall()
+        return [cls.create_instance(row) for row in restaurant_rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT * FROM restaurants
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.create_instance(row)
     

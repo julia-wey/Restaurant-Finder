@@ -1,5 +1,4 @@
 from models.__init__ import CURSOR, CONN
-#from models.restaurant import Restaurant
 
 class City:
     def __init__(self, name, state, id=None):
@@ -45,5 +44,27 @@ class City:
         new_city.save()
         return new_city
     
-    def __repr__(self):
-        return f'<City name={self.name}>'
+    @classmethod
+    def create_instance(cls, row):
+        return cls(id=row[0], name=row[1], state=row[2])
+
+    @classmethod
+    def display_all(cls):
+        sql = "SELECT * FROM cities;"
+        city_rows = CURSOR.execute(sql).fetchall()
+        return [cls.create_instance(row) for row in city_rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT * FROM cities
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        if row:
+            return cls.create_instance(row)
+        else:
+            raise ValueError(f'no city with id of {id}')
+    
+        
+         
