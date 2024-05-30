@@ -19,20 +19,20 @@ class Restaurant:
         self.ID = CURSOR.lastrowid
 
     def delete(self):
-        if not self.id:
-            print('no id')
+        if not self.name:
+            #print('no id')
             return None
         sql = """
             DELETE FROM restaurants
-            WHERE id = ?
+            WHERE name = ?
         """
-        CURSOR.execute(sql, (self.id,))
+        CURSOR.execute(sql, (self.name,))
         CONN.commit()
-        print("successfully deleted from database")
-        self.id = None
+        print(f'{self.name} successfully deleted from database.')
+        #self.name = None
 
     def __repr__(self):
-        return f'<Restaurant name={self.name} city_id={self.city_id}>'
+        return f'<Restaurant name={self.name}, City ID={self.city_id}>'
     
     @classmethod
     def create_table(cls):
@@ -69,6 +69,19 @@ class Restaurant:
         restaurant_rows = CURSOR.execute(sql).fetchall()
         return [cls.create_instance(row) for row in restaurant_rows]
     
+    @classmethod
+    def find_restaurant_by_name(cls, name):
+        sql = """
+            SELECT * FROM restaurants
+            WHERE name = ?
+        """
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        if row:
+            return cls.create_instance(row)
+        else:
+            None
+            #raise ValueError(f'{name} not found.')
+
     @classmethod
     def find_by_id(cls, id):
         sql = """

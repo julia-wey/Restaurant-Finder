@@ -54,6 +54,33 @@ class City:
         city_rows = CURSOR.execute(sql).fetchall()
         return [cls.create_instance(row) for row in city_rows]
     
+    def delete(self):
+        if not self.id:
+            print('no id')
+            return None
+        sql = """
+            DELETE FROM cities
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        print("successfully deleted from database")
+        self.id = None
+
+    @classmethod
+    def find_city_by_name(cls, name):
+        sql = """
+            SELECT * FROM cities
+            WHERE name = ?
+        """
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        if row:
+            return cls.create_instance(row)
+        else:
+            None
+            #raise ValueError(f'{name} not found.')
+
+
     @classmethod
     def find_by_id(cls, id):
         sql = """
@@ -64,7 +91,8 @@ class City:
         if row:
             return cls.create_instance(row)
         else:
-            raise ValueError(f'no city with id of {id}')
+            None
+            #raise ValueError(f'City with id of {id} not found.')
     
         
          
