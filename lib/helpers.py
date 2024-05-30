@@ -71,3 +71,11 @@ def delete_restaurant():
     else:
         print(f'{name} not found.')
 
+def list_restaurants_by_city():
+    name = input("Enter the city's name: ")
+    if city := City.find_city_by_name(name):
+        for restaurant in city.restaurants():
+            print(restaurant)
+        else:
+            print(f'City {name} not found.')
+

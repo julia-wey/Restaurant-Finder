@@ -7,7 +7,33 @@ class City:
         self.state = state
     
     def __repr__(self):
-        return f'<City name={self.name}>'
+        return f'<City name = {self.name}>'
+    
+    @property
+    def name(self):
+        return self._name 
+    
+    @name.setter
+    def name(self, name):
+        if isinstance(name, str) and len(name):
+            self._name = name
+        else:
+            raise ValueError(
+                "Name must be a non-empty string."
+            )
+    
+    @property
+    def state(self):
+        return self._state 
+    
+    @state.setter
+    def state(self, state):
+        if isinstance(state, str) and len(state) == 2:
+            self._state = state
+        else:
+            raise ValueError(
+                "U.S. State must be a two-letter abbreviation."
+            )
     
     def save(self):
             sql = """
@@ -16,7 +42,6 @@ class City:
             """
             CURSOR.execute(sql, (self.name, self.state))
             CONN.commit()
-            #import ipdb; ipdb.set_trace()
             self.id = CURSOR.lastrowid 
 
     @classmethod
@@ -30,7 +55,6 @@ class City:
         """
         CURSOR.execute(sql)
         CONN.commit()
-    #import ipdb; ipdb.set_trace()
 
     @classmethod
     def drop_table(cls):
@@ -78,8 +102,6 @@ class City:
             return cls.create_instance(row)
         else:
             None
-            #raise ValueError(f'{name} not found.')
-
 
     @classmethod
     def find_by_id(cls, id):
@@ -92,7 +114,21 @@ class City:
             return cls.create_instance(row)
         else:
             None
-            #raise ValueError(f'City with id of {id} not found.')
+
+    def restaurants(self):
+        """Return list of restaurants associated with current city"""
+        from models.restaurant import Restaurant
+        sql = """
+            SELECT * FROM restaurants
+            WHERE city_id = ?
+        """
+        CURSOR.execute(sql, (self.id,),)
+
+        rows = CURSOR.fetchall()
+        return [
+            Restaurant.create_instance(row) for row in rows
+        ]
+       
     
         
          

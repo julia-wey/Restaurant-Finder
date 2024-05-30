@@ -1,4 +1,5 @@
 from models.__init__ import CURSOR, CONN
+from models.city import City
 
 class Restaurant:
 
@@ -7,6 +8,44 @@ class Restaurant:
         self.name = name
         self.cuisine = cuisine
         self.city_id = city_id
+
+    @property
+    def name(self):
+        return self._name 
+    
+    @name.setter
+    def name(self, name):
+        if isinstance(name, str) and len(name):
+            self._name = name
+        else:
+            raise ValueError(
+                "Name must be a non-empty string."
+            )
+    @property
+    def cuisine(self):
+        return self._cuisine 
+    
+    @cuisine.setter
+    def cuisine(self, cuisine):
+        if isinstance(cuisine, str) and len(cuisine):
+            self._cuisine = cuisine
+        else:
+            raise ValueError(
+                "Cuisine must be a non-empty string."
+            )
+
+    @property
+    def city_id(self):
+        return self._city_id 
+    
+    @city_id.setter
+    def city_id(self, city_id):
+        if type(city_id) is int and City.find_by_id(city_id):
+            self._city_id = city_id
+        else:
+            raise ValueError(
+                "city_id must reference a city in the database."
+            )
 
     def save(self):
         sql = """
@@ -32,7 +71,12 @@ class Restaurant:
         #self.name = None
 
     def __repr__(self):
-        return f'<Restaurant name={self.name}, City ID={self.city_id}>'
+        city_name = "Unknown"
+        if self.city_id is not None:
+            city = City.find_by_id(self.city_id)
+            if city:
+                city_name = city.name
+        return f'<Restaurant = {self.name}, City = {city_name}>'
     
     @classmethod
     def create_table(cls):
@@ -89,5 +133,8 @@ class Restaurant:
             WHERE id = ?
         """
         row = CURSOR.execute(sql, (id,)).fetchone()
-        return cls.create_instance(row)
+        if row:
+            return cls.create_instance(row)
+        else:
+            None
     

@@ -11,7 +11,8 @@ from helpers import (
     find_restaurant_by_name,
     find_restaurant_by_id,
     create_restaurant,
-    delete_restaurant
+    delete_restaurant,
+    list_restaurants_by_city
 )
 
 def main():
@@ -40,6 +41,8 @@ def main():
             create_restaurant()
         elif choice == "10":
             delete_restaurant()
+        elif choice == "11":
+            list_restaurants_by_city()
         else:
             print("Invalid choice")
 
@@ -57,6 +60,7 @@ def menu():
     print("8. Find restaurant by id.")
     print("9. Add new restaurant.")
     print("10. Delete restaurant.")
+    print("11. List all restaurants in city.")
 
 if __name__ == "__main__":
     main()
